@@ -16,7 +16,7 @@ const bitcoin = new Blockchain();
 //bitcoin.createNewTransaction(400, 'ALEXVBN3YA2DH23L97', 'JENNM5TAQD567OKJL1');
 //bitcoin.createNewBlock(987123, 'KJ3F289UYCVXNJU', 'DG3YWTSR36UNLK1');
 
-const previousBlockHash = '23RGH45KMNLOPIZXACV345G7H89N';
+/*const previousBlockHash = '23RGH45KMNLOPIZXACV345G7H89N';
 
 const currentBlockData = [
     {
@@ -39,6 +39,6 @@ const currentBlockData = [
 const nonce = 156120;
 
 //console.log(bitcoin.proofOfWork(previousBlockHash, currentBlockData));
-console.log(bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce));
+console.log(bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce)); */
 
-//console.log(bitcoin);
+console.log(bitcoin);
