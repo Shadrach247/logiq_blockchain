@@ -21,6 +21,7 @@ app.post('/transaction', function(req, res) {
 });
 
 app.get('/mine', function(req, res) {
+    const lastBlock = bitcoin.getLastBlock();
     const previousBlockHash = lastBlock.hash;
     const currentBlockData = {
         transactions: bitcoin.pendingTransactions,
