@@ -17,10 +17,35 @@ app.get('/blockchain', function(req, res) {
     res.send(bitcoin);
 });
 
+// create a new transaction
 app.post('/transaction', function(req, res) {
-    const blockIndex = bitcoin.createNewTransaction(req.body.amount, req.body.sender,
+    const newTransaction = req.body;
+    const blockIndex = bitcoin.addTransactionToPendingTransactions(newTransaction);
+        res.json({note: `Transaction will be added in block ${blockIndex}.`}); 
+});
+
+// broadcast transaction
+app.post('/transaction/broadcast', function(req, res) {
+    const newTransaction = bitcoin.createNewTransaction(req.body.amount, req.body.sender,
         req.body.recipient);
-        res.json({note: `Transaction will be added on block ${blockIndex}.`}); 
+
+    bitcoin.addTransactionToPendingTransactions (newTransaction);
+
+    const requestPromises = [];
+
+    bitcoin.networkNodes.forEach(networkNodeUrl => {
+        const requestOptions = {
+            uri: newworkNodeUrl + '/transaction',
+            method: 'POST',
+            body: newTransaction,
+            json: true
+        };
+        requestPromises.push(rp(requestOptions));
+    });
+    Promise.all(requestPromises)
+    .then(data => {
+        res.json({ note: 'Transaction created and broadcast successfully.' });
+    });
 });
 
 app.get('/mine', function(req, res) {
@@ -98,28 +123,7 @@ app.post('/register-nodes-bulk', function(req, res) {
 
 });
 
-app.post('/transaction/broadcast', function(req, res) {
-    const newTransaction = bitcoin.createNewTransaction(req.body.amount, req.body.sender,
-        req.body.recipient);
 
-    bitcoin.addTransactionToPendingTransactions (newTransaction);
-
-    const requestPromises = [];
-
-    bitcoin.networkNodes.forEach(networkNodeUrl => {
-        const requestOptions = {
-            uri: newworkNodeUrl + '/transaction',
-            method: 'POST',
-            body: newTransaction,
-            json: true
-        };
-        requestPromises.push(rp(requestOptions));
-    });
-    Promise.all(requestPromises)
-    .then(data => {
-        res.json({ note: 'Transaction created and broadcast successfully.' });
-    });
-});
 
 app.listen(port, function() {
     console.log(`listening on port ${port}...`);
